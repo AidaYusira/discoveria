@@ -1,0 +1,9 @@
+kind: wasmer.io/App.v0
+name: discoveria
+owner: aidayusira
+package: .
+env:
+  APP_KEY: "base64:j2q6FNkja5Or6HvBvEkm3VHwI0IxqkeQd4887t1XY7A="
+  APP_ENV: production
+  APP_DEBUG: "false"
+  # Jika pakai database di Wasmer, tambahkan DB_* sesuai info dari Wasmer
