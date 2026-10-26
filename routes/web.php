@@ -39,3 +39,18 @@ Route::get('/dashboard', function () {
     if (!session('is_logged_in')) return redirect('/login');
     return view('dashboard'); 
 });
+
+Route::get('/setup/{token}', function ($token) {
+    abort_unless(env('SETUP_TOKEN') && hash_equals(env('SETUP_TOKEN'), $token), 404);
+
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    $out = \Illuminate\Support\Facades\Artisan::output();
+
+    if (\App\Models\Material::count() === 0) {
+        \App\Models\Category::query()->delete();
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        $out .= \Illuminate\Support\Facades\Artisan::output();
+    }
+
+    return response('<pre>' . e($out) . '</pre>Jumlah materi: ' . \App\Models\Material::count());
+});
